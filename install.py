@@ -11,7 +11,7 @@ def loader():
 class RMIInstaller(ExtensionInstaller):
     def __init__(self):
         super(RMIInstaller, self).__init__(
-            version="0.1",
+            version="0.2",
             name="rmi",
             description="A driver or service which fetches data from RMI (Belgium)",
             author="Bram Oosterlynck",

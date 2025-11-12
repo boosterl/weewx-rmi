@@ -180,19 +180,15 @@ class RMIService(weewx.engine.StdService):
         else:
             raise ValueError(f"Unknown binding: {self.binding}")
 
-    def new_loop_packet(self, event):
-        data = asyncio.run(self.fetcher.get_weather_packet())
-        data["usUnits"] = weewx.METRIC
-        print(data)
-        converter = weewx.units.StdUnitConverters[event.packet["usUnits"]]
-        converted_data = converter.convertDict(data)
-        for vname in converted_data:
-            event.packet[vname] = _get_as_float(converted_data, vname)
-
     def new_archive_record(self, event):
+        self._process_packet_or_record(event)
+
+    def new_loop_packet(self, event):
+        self._process_packet_or_record(event)
+
+    def _process_packet_or_record(self, event):
         data = asyncio.run(self.fetcher.get_weather_packet())
         data["usUnits"] = weewx.METRIC
-        print(data)
         converter = weewx.units.StdUnitConverters[event.packet["usUnits"]]
         converted_data = converter.convertDict(data)
         for vname in converted_data:
